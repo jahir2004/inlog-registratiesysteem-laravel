@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+Use Symfony\Polyfill\Idn\Idn;
 
 class PraktijkmanagementController extends Controller
 {
     private $userModel;
 
-    public function __construct()
+    public function __construct(User $userModel)
     {
-        $this->userModel = new User();
+        $this->userModel = $userModel;
     }
 
     public function index()
@@ -141,10 +143,10 @@ class PraktijkmanagementController extends Controller
 
     public function manageUserroles()
     {
-        $users = User::all();
+        $users = $this->userModel->sp_GetAllUsers(Auth::id());
 
         return view('praktijkmanagement.userroles',[
-            'title' => 'Gebruikersrollen Management',
+            'title' => 'Gebruikersrollen',
             'users' => $users,
         ]);
     }
